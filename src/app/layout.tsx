@@ -20,6 +20,7 @@ export const metadata: Metadata = {
       'es-ES': '/es',
       'zh-CN': '/zh',
       'ru-RU': '/ru',
+      'ar-AE': '/ar',
     },
   },
   openGraph: {
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'en_US',
-    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU'],
+    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE'],
     type: 'website',
   },
   twitter: {
@@ -65,8 +66,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang: string };
 }>) {
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -81,11 +84,14 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU"]
+    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE"]
   };
+
+  const lang = params.lang || 'en';
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
   
   return (
-    <html lang="en" className="dark">
+    <html lang={lang} dir={dir} className="dark">
       <head>
         <script
           type="application/ld+json"
@@ -99,6 +105,7 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="es-ES" href={`${siteUrl}/es`} />
         <link rel="alternate" hrefLang="zh-CN" href={`${siteUrl}/zh`} />
         <link rel="alternate" hrefLang="ru-RU" href={`${siteUrl}/ru`} />
+        <link rel="alternate" hrefLang="ar-AE" href={`${siteUrl}/ar`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen">
