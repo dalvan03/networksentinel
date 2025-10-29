@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const locales = ['en', 'es', 'pt', 'zh', 'ru', 'ar', 'fr', 'de', 'nl'];
+const locales = ['en', 'es', 'pt', 'zh', 'ru', 'ar', 'fr', 'de', 'nl', 'hi', 'bn', 'ur', 'id', 'ja', 'tr', 'te', 'vi'];
 const defaultLocale = 'en';
 
 function getLocale(request: NextRequest): string {
@@ -8,8 +8,9 @@ function getLocale(request: NextRequest): string {
   if (acceptLanguage) {
     const languages = acceptLanguage.split(',').map(lang => lang.split(';')[0].trim());
     for (const lang of languages) {
-      if (locales.includes(lang.split('-')[0])) {
-        return lang.split('-')[0];
+      const locale = lang.split('-')[0];
+      if (locales.includes(locale)) {
+        return locale;
       }
     }
   }

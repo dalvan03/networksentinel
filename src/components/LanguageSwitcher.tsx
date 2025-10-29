@@ -14,19 +14,28 @@ import { useState, useEffect } from "react";
 
 const languages = [
   { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'pt', name: 'Portuguese', nativeName: 'Português' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
   { code: 'es', name: 'Spanish', nativeName: 'Español' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文 (简体)' },
-  { code: 'ru', name: 'Russian', nativeName: 'Русский' },
-  { code: 'ar', name: 'Arabic', nativeName: 'العربية' },
   { code: 'fr', name: 'French', nativeName: 'Français' },
+  { code: 'ar', name: 'Arabic', nativeName: 'العربية' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
+  { code: 'pt', name: 'Portuguese', nativeName: 'Português' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский' },
+  { code: 'ur', name: 'Urdu', nativeName: 'اردو' },
+  { code: 'id', name: 'Indonesian', nativeName: 'Bahasa Indonesia' },
   { code: 'de', name: 'German', nativeName: 'Deutsch' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語' },
+  { code: 'tr', name: 'Turkish', nativeName: 'Türkçe' },
+  { code: 'te', name: 'Telugu', nativeName: 'తెలుగు' },
+  { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文 (简体)' },
   { code: 'nl', name: 'Dutch', nativeName: 'Nederlands' },
 ];
 
+
 export function LanguageSwitcher() {
   const pathname = usePathname();
-  const [currentLang, setCurrentLang] = useState({ code: 'en', name: 'English' });
+  const [currentLang, setCurrentLang] = useState({ code: 'en', name: 'English', nativeName: 'English' });
 
   useEffect(() => {
     const pathLang = pathname.split('/')[1] || 'en';
@@ -42,7 +51,7 @@ export function LanguageSwitcher() {
           <span>{currentLang.nativeName}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
         {languages.map((lang) => (
           <Link href={`/${lang.code}`} key={lang.code}>
             <DropdownMenuItem>

@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       'fr-FR': '/fr',
       'de-DE': '/de',
       'nl-NL': '/nl',
+      'hi-IN': '/hi',
+      'bn-BD': '/bn',
+      'ur-PK': '/ur',
+      'id-ID': '/id',
+      'ja-JP': '/ja',
+      'tr-TR': '/tr',
+      'te-IN': '/te',
+      'vi-VN': '/vi',
     },
   },
   openGraph: {
@@ -42,7 +50,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'en_US',
-    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE', 'fr_FR', 'de_DE', 'nl_NL'],
+    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE', 'fr_FR', 'de_DE', 'nl_NL', 'hi_IN', 'bn_BD', 'ur_PK', 'id_ID', 'ja_JP', 'tr_TR', 'te_IN', 'vi_VN'],
     type: 'website',
   },
   twitter: {
@@ -89,11 +97,11 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE", "fr-FR", "de-DE", "nl-NL"]
+    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE", "fr-FR", "de-DE", "nl-NL", "hi-IN", "bn-BD", "ur-PK", "id-ID", "ja-JP", "tr-TR", "te-IN", "vi-VN"]
   };
 
   const lang = params.lang || 'en';
-  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const dir = ['ar', 'ur'].includes(lang) ? 'rtl' : 'ltr';
   
   return (
     <html lang={lang} dir={dir} className="dark">
@@ -114,6 +122,14 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="fr-FR" href={`${siteUrl}/fr`} />
         <link rel="alternate" hrefLang="de-DE" href={`${siteUrl}/de`} />
         <link rel="alternate" hrefLang="nl-NL" href={`${siteUrl}/nl`} />
+        <link rel="alternate" hrefLang="hi-IN" href={`${siteUrl}/hi`} />
+        <link rel="alternate" hrefLang="bn-BD" href={`${siteUrl}/bn`} />
+        <link rel="alternate" hrefLang="ur-PK" href={`${siteUrl}/ur`} />
+        <link rel="alternate" hrefLang="id-ID" href={`${siteUrl}/id`} />
+        <link rel="alternate" hrefLang="ja-JP" href={`${siteUrl}/ja`} />
+        <link rel="alternate" hrefLang="tr-TR" href={`${siteUrl}/tr`} />
+        <link rel="alternate" hrefLang="te-IN" href={`${siteUrl}/te`} />
+        <link rel="alternate" hrefLang="vi-VN" href={`${siteUrl}/vi`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col">
