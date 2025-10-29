@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     languages: {
       'en-US': '/en',
       'pt-BR': '/pt',
+      'es-ES': '/es',
     },
   },
   openGraph: {
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'en_US',
-    alternateLocale: 'pt_BR',
+    alternateLocale: ['pt_BR', 'es_ES'],
     type: 'website',
   },
   twitter: {
@@ -78,7 +79,7 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR"]
+    "inLanguage": ["en-US", "pt-BR", "es-ES"]
   };
   
   return (
@@ -93,6 +94,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
         <link rel="alternate" hrefLang="pt-BR" href={`${siteUrl}/pt`} />
         <link rel="alternate" hrefLang="en-US" href={`${siteUrl}/en`} />
+        <link rel="alternate" hrefLang="es-ES" href={`${siteUrl}/es`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen">
