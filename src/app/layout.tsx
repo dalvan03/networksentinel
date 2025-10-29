@@ -12,18 +12,32 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const t = getTranslations(lang);
 
   const languages: { [key: string]: string } = {
-    'en-US': '/en', 'pt-BR': '/pt', 'es-ES': '/es', 'zh-CN': '/zh',
-    'ru-RU': '/ru', 'ar-AE': '/ar', 'fr-FR': '/fr', 'de-DE': '/de',
-    'nl-NL': '/nl', 'hi-IN': '/hi', 'bn-BD': '/bn', 'ur-PK': '/ur',
-    'id-ID': '/id', 'ja-JP': '/ja', 'tr-TR': '/tr', 'te-IN': '/te', 'vi-VN': '/vi'
+    'en-US': '/en', 'en-GB': '/en', 'en-CA': '/en', 'en-AU': '/en',
+    'pt-BR': '/pt', 'pt-PT': '/pt',
+    'es-ES': '/es', 'es-MX': '/es', 'es-AR': '/es',
+    'zh-CN': '/zh', 'zh-TW': '/zh', 'zh-HK': '/zh',
+    'ru-RU': '/ru',
+    'ar-SA': '/ar', 'ar-EG': '/ar', 'ar-AE': '/ar',
+    'fr-FR': '/fr', 'fr-CA': '/fr',
+    'de-DE': '/de', 'de-AT': '/de', 'de-CH': '/de',
+    'nl-NL': '/nl', 'nl-BE': '/nl',
+    'hi-IN': '/hi',
+    'bn-BD': '/bn', 'bn-IN': '/bn',
+    'ur-PK': '/ur', 'ur-IN': '/ur',
+    'id-ID': '/id',
+    'ja-JP': '/ja',
+    'tr-TR': '/tr',
+    'te-IN': '/te',
+    'vi-VN': '/vi',
   };
 
-  const alternateLocales = Object.keys(languages).filter(key => key !== `${lang}-US` && key !== `${lang}-BR` && key !== `${lang}-ES` && key !== `${lang}-CN` && key !== `${lang}-RU` && key !== `${lang}-AE` && key !== `${lang}-FR` && key !== `${lang}-DE` && key !== `${lang}-NL` && key !== `${lang}-IN` && key !== `${lang}-BD` && key !== `${lang}-PK` && key !== `${lang}-ID` && key !== `${lang}-JP` && key !== `${lang}-TR` && key !== `${lang}-VN`);
+  const currentLocale = Object.keys(languages).find(key => key.startsWith(lang)) || 'en-US';
+
+  const alternateLocales = Object.keys(languages).filter(key => key !== currentLocale);
   const alternateLocaleMap: { [key: string]: string } = {};
   alternateLocales.forEach(loc => {
-    alternateLocaleMap[loc] = languages[loc];
+    alternateLocaleMap[loc] = `${siteUrl}${languages[loc]}`;
   });
-
 
   return {
     metadataBase: new URL(siteUrl),
@@ -35,7 +49,9 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     keywords: t.meta.keywords,
     alternates: {
       canonical: `/${lang}`,
-      languages: languages,
+      languages: Object.fromEntries(
+        Object.entries(languages).map(([locale, path]) => [locale, `${siteUrl}${path}`])
+      ),
     },
     openGraph: {
       title: t.meta.title,
@@ -96,6 +112,7 @@ export default function RootLayout({
   const lang = params.lang || 'en';
   const t = getTranslations(lang);
 
+  const allLangs = ["en", "pt", "es", "zh", "ru", "ar", "fr", "de", "nl", "hi", "bn", "ur", "id", "ja", "tr", "te", "vi"];
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -109,7 +126,7 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE", "fr-FR", "de-DE", "nl-NL", "hi-IN", "bn-BD", "ur-PK", "id-ID", "ja-JP", "tr-TR", "te-IN", "vi-VN"]
+    "inLanguage": allLangs,
   };
 
   const dir = ['ar', 'ur'].includes(lang) ? 'rtl' : 'ltr';
@@ -124,23 +141,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link rel="alternate" hrefLang="en-US" href={`${siteUrl}/en`} />
-        <link rel="alternate" hrefLang="pt-BR" href={`${siteUrl}/pt`} />
-        <link rel="alternate" hrefLang="es-ES" href={`${siteUrl}/es`} />
-        <link rel="alternate" hrefLang="zh-CN" href={`${siteUrl}/zh`} />
-        <link rel="alternate" hrefLang="ru-RU" href={`${siteUrl}/ru`} />
-        <link rel="alternate" hrefLang="ar-AE" href={`${siteUrl}/ar`} />
-        <link rel="alternate" hrefLang="fr-FR" href={`${siteUrl}/fr`} />
-        <link rel="alternate" hrefLang="de-DE" href={`${siteUrl}/de`} />
-        <link rel="alternate" hrefLang="nl-NL" href={`${siteUrl}/nl`} />
-        <link rel="alternate" hrefLang="hi-IN" href={`${siteUrl}/hi`} />
-        <link rel="alternate" hrefLang="bn-BD" href={`${siteUrl}/bn`} />
-        <link rel="alternate" hrefLang="ur-PK" href={`${siteUrl}/ur`} />
-        <link rel="alternate" hrefLang="id-ID" href={`${siteUrl}/id`} />
-        <link rel="alternate" hrefLang="ja-JP" href={`${siteUrl}/ja`} />
-        <link rel="alternate" hrefLang="tr-TR" href={`${siteUrl}/tr`} />
-        <link rel="alternate" hrefLang="te-IN" href={`${siteUrl}/te`} />
-        <link rel="alternate" hrefLang="vi-VN" href={`${siteUrl}/vi`} />
+        {allLangs.map(l => <link key={l} rel="alternate" hrefLang={l} href={`${siteUrl}/${l}`} />)}
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col">
