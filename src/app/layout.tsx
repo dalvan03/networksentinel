@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { Github } from 'lucide-react';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000';
 
@@ -114,9 +116,23 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="nl-NL" href={`${siteUrl}/nl`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
-      <body className="font-body antialiased bg-background text-foreground min-h-screen">
-        {children}
+      <body className="font-body antialiased bg-background text-foreground min-h-screen flex flex-col">
+        <div className="flex-grow">
+          {children}
+        </div>
         <Toaster />
+        <footer className="w-full border-t border-border/50 py-4 px-4 sm:px-6 md:px-8">
+          <div className="container mx-auto flex items-center justify-between">
+            <LanguageSwitcher />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>Built with Firebase Studio</span>
+              <a href="https://github.com/firebase/studio" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                <Github className="h-4 w-4" />
+                <span className="sr-only">GitHub</span>
+              </a>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
