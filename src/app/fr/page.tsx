@@ -1,9 +1,46 @@
+
 import SentinelDashboard from '@/components/network-sentinel/SentinelDashboard';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const faq = [
+  {
+    question: "Comment fonctionne l'outil ?",
+    answer: "Network Sentinel envoie une requête HTTP à chaque URL fournie. Nous analysons la réponse pour déterminer le statut (en ligne, hors ligne, erreur), le code de statut HTTP et le temps de réponse, le tout en temps réel."
+  },
+  {
+    question: "Quels codes de statut indiquent qu'un site est \"En ligne\" ?",
+    answer: "Nous considérons qu'un site est en ligne s'il répond avec un code de statut dans la plage 200-299, ce qui indique un succès. Tout autre code est classé comme \"Hors ligne\" ou \"Erreur\"."
+  },
+  {
+    question: "Est-il sûr d'utiliser cet outil ?",
+    answer: "Oui. L'outil ne vérifie que le statut public des URL que vous fournissez. Nous ne collectons, ne stockons ni ne partageons les URL ou les résultats. Toutes les vérifications sont effectuées en toute sécurité."
+  },
+  {
+    question: "Puis-je vérifier plusieurs sites à la fois ?",
+    answer: "Oui ! Vous pouvez coller une liste d'URL, une par ligne, dans la zone de texte ou télécharger un fichier JSON contenant un tableau de chaînes d'URL pour une vérification en masse."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="absolute inset-0 z-0 opacity-10">
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px]">
@@ -27,30 +64,12 @@ export default function Home() {
         <section className="max-w-4xl mx-auto mt-20" aria-labelledby="faq-title">
           <h2 id="faq-title" className="text-3xl font-headline font-bold text-center mb-8">Questions fréquentes</h2>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Comment fonctionne l'outil ?</AccordionTrigger>
-              <AccordionContent>
-                Network Sentinel envoie une requête HTTP à chaque URL fournie. Nous analysons la réponse pour déterminer le statut (en ligne, hors ligne, erreur), le code de statut HTTP et le temps de réponse, le tout en temps réel.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>Quels codes de statut indiquent qu'un site est "En ligne" ?</AccordionTrigger>
-              <AccordionContent>
-                Nous considérons qu'un site est en ligne s'il répond avec un code de statut dans la plage 200-299, ce qui indique un succès. Tout autre code est classé comme "Hors ligne" ou "Erreur".
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Est-il sûr d'utiliser cet outil ?</AccordionTrigger>
-              <AccordionContent>
-                Oui. L'outil ne vérifie que le statut public des URL que vous fournissez. Nous ne collectons, ne stockons ni ne partageons les URL ou les résultats. Toutes les vérifications sont effectuées en toute sécurité.
-              </-AccordionContent>
-            </AccordionItem>
-             <AccordionItem value="item-4">
-              <AccordionTrigger>Puis-je vérifier plusieurs sites à la fois ?</AccordionTrigger>
-              <AccordionContent>
-                Oui ! Vous pouvez coller une liste d'URL, une par ligne, dans la zone de texte ou télécharger un fichier JSON contenant un tableau de chaînes d'URL pour une vérification en masse.
-              </AccordionContent>
-            </AccordionItem>
+            {faq.map((item, index) => (
+              <AccordionItem value={`item-${index + 1}`} key={index}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>{item.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </section>
       </main>

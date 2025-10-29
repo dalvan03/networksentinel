@@ -1,9 +1,46 @@
+
 import SentinelDashboard from '@/components/network-sentinel/SentinelDashboard';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const faq = [
+  {
+    question: "Как работает инструмент?",
+    answer: "Network Sentinel отправляет HTTP-запрос на каждый предоставленный URL. Мы анализируем ответ, чтобы определить статус (онлайн, офлайн, ошибка), код состояния HTTP и время ответа, все в режиме реального времени."
+  },
+  {
+    question: "Какие коды состояния указывают, что сайт 'Онлайн'?",
+    answer: "Мы считаем сайт онлайн, если он отвечает кодом состояния в диапазоне 200-299, что указывает на успех. Любой другой код классифицируется как 'Офлайн' или 'Ошибка'."
+  },
+  {
+    question: "Безопасно ли использовать этот инструмент?",
+    answer: "Да. Инструмент проверяет только общедоступный статус предоставленных вами URL-адресов. Мы не собираем, не храним и не передаем URL-адреса или результаты. Вся проверка выполняется безопасно."
+  },
+  {
+    question: "Могу ли я проверять несколько сайтов одновременно?",
+    answer: "Да! Вы можете вставить список URL-адресов, по одному в строке, в текстовое поле или загрузить файл JSON, содержащий массив строк URL для массовой проверки."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="absolute inset-0 z-0 opacity-10">
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px]">
@@ -27,30 +64,12 @@ export default function Home() {
         <section className="max-w-4xl mx-auto mt-20" aria-labelledby="faq-title">
           <h2 id="faq-title" className="text-3xl font-headline font-bold text-center mb-8">Часто задаваемые вопросы</h2>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Как работает инструмент?</AccordionTrigger>
-              <AccordionContent>
-                Network Sentinel отправляет HTTP-запрос на каждый предоставленный URL. Мы анализируем ответ, чтобы определить статус (онлайн, офлайн, ошибка), код состояния HTTP и время ответа, все в режиме реального времени.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>Какие коды состояния указывают, что сайт 'Онлайн'?</AccordionTrigger>
-              <AccordionContent>
-                Мы считаем сайт онлайн, если он отвечает кодом состояния в диапазоне 200-299, что указывает на успех. Любой другой код классифицируется как 'Офлайн' или 'Ошибка'.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Безопасно ли использовать этот инструмент?</AccordionTrigger>
-              <AccordionContent>
-                Да. Инструмент проверяет только общедоступный статус предоставленных вами URL-адресов. Мы не собираем, не храним и не передаем URL-адреса или результаты. Вся проверка выполняется безопасно.
-              </AccordionContent>
-            </AccordionItem>
-             <AccordionItem value="item-4">
-              <AccordionTrigger>Могу ли я проверять несколько сайтов одновременно?</AccordionTrigger>
-              <AccordionContent>
-                Да! Вы можете вставить список URL-адресов, по одному в строке, в текстовое поле или загрузить файл JSON, содержащий массив строк URL для массовой проверки.
-              </AccordionContent>
-            </AccordionItem>
+            {faq.map((item, index) => (
+              <AccordionItem value={`item-${index + 1}`} key={index}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>{item.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </section>
       </main>

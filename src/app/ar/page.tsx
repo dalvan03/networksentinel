@@ -1,9 +1,47 @@
+
 import SentinelDashboard from '@/components/network-sentinel/SentinelDashboard';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const faq = [
+  {
+    question: "كيف تعمل الأداة؟",
+    answer: "يرسل Network Sentinel طلب HTTP إلى كل عنوان URL يتم توفيره. نقوم بتحليل الاستجابة لتحديد الحالة (متصل، غير متصل، خطأ)، ورمز حالة HTTP، ووقت الاستجابة، كل ذلك في الوقت الفعلي."
+  },
+  {
+    question: "ما هي رموز الحالة التي تشير إلى أن الموقع 'متصل'؟",
+    answer: "نعتبر الموقع متصلاً إذا استجاب برمز حالة في نطاق 200-299، مما يشير إلى النجاح. يتم تصنيف أي رمز آخر على أنه 'غير متصل' أو 'خطأ'."
+  },
+  {
+    question: "هل استخدام هذه الأداة آمن؟",
+    answer: "نعم. تتحقق الأداة فقط من الحالة العامة لعناوين URL التي تقدمها. نحن لا نجمع أو نخزن أو نشارك عناوين URL أو النتائج. تتم جميع عمليات التحقق بشكل آمن."
+  },
+  {
+    question: "هل يمكنني التحقق من عدة مواقع في وقت واحد؟",
+    answer: "نعم! يمكنك لصق قائمة من عناوين URL، واحد في كل سطر، في منطقة النص أو تحميل ملف JSON يحتوي على مصفوفة من سلاسل URL لإجراء فحص جماعي."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
+
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="absolute inset-0 z-0 opacity-10">
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px]">
@@ -27,30 +65,12 @@ export default function Home() {
         <section className="max-w-4xl mx-auto mt-20" aria-labelledby="faq-title">
           <h2 id="faq-title" className="text-3xl font-headline font-bold text-center mb-8">الأسئلة الشائعة</h2>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>كيف تعمل الأداة؟</AccordionTrigger>
-              <AccordionContent>
-                يرسل Network Sentinel طلب HTTP إلى كل عنوان URL يتم توفيره. نقوم بتحليل الاستجابة لتحديد الحالة (متصل، غير متصل، خطأ)، ورمز حالة HTTP، ووقت الاستجابة، كل ذلك في الوقت الفعلي.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>ما هي رموز الحالة التي تشير إلى أن الموقع 'متصل'؟</AccordionTrigger>
-              <AccordionContent>
-                نعتبر الموقع متصلاً إذا استجاب برمز حالة في نطاق 200-299، مما يشير إلى النجاح. يتم تصنيف أي رمز آخر على أنه 'غير متصل' أو 'خطأ'.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>هل استخدام هذه الأداة آمن؟</AccordionTrigger>
-              <AccordionContent>
-                نعم. تتحقق الأداة فقط من الحالة العامة لعناوين URL التي تقدمها. نحن لا نجمع أو نخزن أو نشارك عناوين URL أو النتائج. تتم جميع عمليات التحقق بشكل آمن.
-              </AccordionContent>
-            </AccordionItem>
-             <AccordionItem value="item-4">
-              <AccordionTrigger>هل يمكنني التحقق من عدة مواقع في وقت واحد؟</AccordionTrigger>
-              <AccordionContent>
-                نعم! يمكنك لصق قائمة من عناوين URL، واحد في كل سطر، في منطقة النص أو تحميل ملف JSON يحتوي على مصفوفة من سلاسل URL لإجراء فحص جماعي.
-              </AccordionContent>
-            </AccordionItem>
+            {faq.map((item, index) => (
+              <AccordionItem value={`item-${index + 1}`} key={index}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>{item.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </section>
       </main>

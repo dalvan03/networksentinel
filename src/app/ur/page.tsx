@@ -1,9 +1,46 @@
+
 import SentinelDashboard from '@/components/network-sentinel/SentinelDashboard';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const faq = [
+  {
+    question: "یہ ٹول کیسے کام کرتا ہے؟",
+    answer: "نیٹ ورک سینٹینیل فراہم کردہ ہر یو آر ایل کو ایک HTTP درخواست بھیجتا ہے۔ ہم اسٹیٹس (آن لائن، آف لائن، خرابی)، HTTP اسٹیٹس کوڈ، اور جوابی وقت کا تعین کرنے کے لیے جواب کا تجزیہ کرتے ہیں، سب حقیقی وقت میں۔"
+  },
+  {
+    question: "کون سے اسٹیٹس کوڈز 'آن لائن' سائٹ کی نشاندہی کرتے ہیں؟",
+    answer: "ہم ایک سائٹ کو آن لائن سمجھتے ہیں اگر وہ 200-299 رینج میں اسٹیٹس کوڈ کے ساتھ جواب دیتی ہے، جو کامیابی کی نشاندہی کرتا ہے۔ کسی دوسرے کوڈ کو 'آف لائن' یا 'خرابی' کے طور پر درجہ بندی کیا جاتا ہے۔"
+  },
+  {
+    question: "کیا اس ٹول کا استعمال محفوظ ہے؟",
+    answer: "جی ہاں۔ یہ ٹول صرف आपके فراہم کردہ یو آر ایلز کی عوامی حیثیت کی جانچ کرتا ہے۔ ہم یو آر ایلز یا نتائج کو جمع، ذخیرہ یا شیئر نہیں करते ہیں۔ تمام تصدیق محفوظ तरीके से کی جاتی ہے۔"
+  },
+  {
+    question: "کیا میں ایک ساتھ कई سائٹس کی جانچ कर सकता ہوں؟",
+    answer: "جی ہاں! آپ ٹیکسٹ ایریا میں یو آر ایلز की एक فہرست، ایک فی لائن، پیسٹ कर सकते ہیں یا بلک چیک کے لیے یو آر ایل سٹرنگز کی ایک صف پر مشتمل JSON فائل اپ لوڈ कर सकते ہیں۔"
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="absolute inset-0 z-0 opacity-10">
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px]">
@@ -27,30 +64,12 @@ export default function Home() {
         <section className="max-w-4xl mx-auto mt-20" aria-labelledby="faq-title" dir="rtl">
           <h2 id="faq-title" className="text-3xl font-headline font-bold text-center mb-8">اکثر पूछे जाने वाले سوالات</h2>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>یہ ٹول کیسے کام کرتا ہے؟</AccordionTrigger>
-              <AccordionContent>
-                نیٹ ورک سینٹینیل فراہم کردہ ہر یو آر ایل کو ایک HTTP درخواست بھیجتا ہے۔ ہم اسٹیٹس (آن لائن، آف لائن، خرابی)، HTTP اسٹیٹس کوڈ، اور جوابی وقت کا تعین کرنے کے لیے جواب کا تجزیہ کرتے ہیں، سب حقیقی وقت میں۔
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>کون سے اسٹیٹس کوڈز 'آن لائن' سائٹ کی نشاندہی کرتے ہیں؟</AccordionTrigger>
-              <AccordionContent>
-                ہم ایک سائٹ کو آن لائن سمجھتے ہیں اگر وہ 200-299 رینج میں اسٹیٹس کوڈ کے ساتھ جواب دیتی ہے، جو کامیابی کی نشاندہی کرتا ہے۔ کسی دوسرے کوڈ کو 'آف لائن' یا 'خرابی' کے طور پر درجہ بندی کیا جاتا ہے۔
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>کیا اس ٹول کا استعمال محفوظ ہے؟</AccordionTrigger>
-              <AccordionContent>
-                جی ہاں۔ یہ ٹول صرف आपके فراہم کردہ یو آر ایلز کی عوامی حیثیت کی جانچ کرتا ہے۔ ہم یو آر ایلز یا نتائج کو جمع، ذخیرہ یا شیئر نہیں करते ہیں۔ تمام تصدیق محفوظ तरीके से کی جاتی ہے۔
-              </AccordionContent>
-            </AccordionItem>
-             <AccordionItem value="item-4">
-              <AccordionTrigger>کیا میں ایک ساتھ कई سائٹس کی جانچ कर सकता ہوں؟</AccordionTrigger>
-              <AccordionContent>
-                جی ہاں! آپ ٹیکسٹ ایریا میں یو آر ایلز की एक فہرست، ایک فی لائن، پیسٹ कर سکتے ہیں یا بلک چیک کے لیے یو آر ایل سٹرنگز کی ایک صف پر مشتمل JSON فائل اپ لوڈ कर सकते ہیں۔
-              </AccordionContent>
-            </AccordionItem>
+            {faq.map((item, index) => (
+              <AccordionItem value={`item-${index + 1}`} key={index}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>{item.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </section>
       </main>
