@@ -1,81 +1,90 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Github } from 'lucide-react';
+import { getTranslations } from '@/lib/translations';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: 'Network Sentinel | Real-Time Website Status Checker',
-    template: '%s | Network Sentinel',
-  },
-  description: 'Check the status of any website in real-time with Network Sentinel. Free online tool to monitor if a site is online, offline, or has errors.',
-  keywords: ['website checker', 'site status', 'is site down', 'website monitoring', 'uptime', 'network tool', 'network sentinel'],
-  alternates: {
-    canonical: '/',
-    languages: {
-      'en-US': '/en',
-      'pt-BR': '/pt',
-      'es-ES': '/es',
-      'zh-CN': '/zh',
-      'ru-RU': '/ru',
-      'ar-AE': '/ar',
-      'fr-FR': '/fr',
-      'de-DE': '/de',
-      'nl-NL': '/nl',
-      'hi-IN': '/hi',
-      'bn-BD': '/bn',
-      'ur-PK': '/ur',
-      'id-ID': '/id',
-      'ja-JP': '/ja',
-      'tr-TR': '/tr',
-      'te-IN': '/te',
-      'vi-VN': '/vi',
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+  const lang = params.lang || 'en';
+  const t = getTranslations(lang);
+
+  const languages: { [key: string]: string } = {
+    'en-US': '/en', 'pt-BR': '/pt', 'es-ES': '/es', 'zh-CN': '/zh',
+    'ru-RU': '/ru', 'ar-AE': '/ar', 'fr-FR': '/fr', 'de-DE': '/de',
+    'nl-NL': '/nl', 'hi-IN': '/hi', 'bn-BD': '/bn', 'ur-PK': '/ur',
+    'id-ID': '/id', 'ja-JP': '/ja', 'tr-TR': '/tr', 'te-IN': '/te', 'vi-VN': '/vi'
+  };
+
+  const alternateLocales = Object.keys(languages).filter(key => key !== `${lang}-US` && key !== `${lang}-BR` && key !== `${lang}-ES` && key !== `${lang}-CN` && key !== `${lang}-RU` && key !== `${lang}-AE` && key !== `${lang}-FR` && key !== `${lang}-DE` && key !== `${lang}-NL` && key !== `${lang}-IN` && key !== `${lang}-BD` && key !== `${lang}-PK` && key !== `${lang}-ID` && key !== `${lang}-JP` && key !== `${lang}-TR` && key !== `${lang}-VN`);
+  const alternateLocaleMap: { [key: string]: string } = {};
+  alternateLocales.forEach(loc => {
+    alternateLocaleMap[loc] = languages[loc];
+  });
+
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: t.meta.title,
+      template: `%s | ${t.appName}`,
     },
-  },
-  openGraph: {
-    title: 'Network Sentinel | Real-Time Website Status Checker',
-    description: 'Free online tool to instantly check the status of multiple URLs.',
-    url: siteUrl,
-    siteName: 'Network Sentinel',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Network Sentinel Banner',
-      },
-    ],
-    locale: 'en_US',
-    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE', 'fr_FR', 'de_DE', 'nl_NL', 'hi_IN', 'bn_BD', 'ur_PK', 'id_ID', 'ja_JP', 'tr_TR', 'te_IN', 'vi_VN'],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Network Sentinel | Real-Time Website Status Checker',
-    description: 'Quickly check if your websites are up. Simple, fast, and free.',
-    images: [`${siteUrl}/og-image.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    description: t.meta.description,
+    keywords: t.meta.keywords,
+    alternates: {
+      canonical: `/${lang}`,
+      languages: languages,
+    },
+    openGraph: {
+      title: t.meta.title,
+      description: t.og.description,
+      url: `${siteUrl}/${lang}`,
+      siteName: t.appName,
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: t.og.imageAlt,
+        },
+      ],
+      locale: t.og.locale,
+      alternateLocale: alternateLocales,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.meta.title,
+      description: t.twitter.description,
+      images: [`${siteUrl}/og-image.png`],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  applicationName: 'Network Sentinel',
-  authors: [{ name: 'Firebase Studio' }],
-  creator: 'Firebase Studio',
-  publisher: 'Firebase Studio',
-  manifest: `${siteUrl}/site.webmanifest`,
-};
+    applicationName: t.appName,
+    authors: [{ name: 'Firebase Studio' }],
+    creator: 'Firebase Studio',
+    publisher: 'Firebase Studio',
+    manifest: `${siteUrl}/site.webmanifest`,
+  };
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
+}
 
 export default function RootLayout({
   children,
@@ -84,11 +93,14 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: string };
 }>) {
+  const lang = params.lang || 'en';
+  const t = getTranslations(lang);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'Network Sentinel',
-    description: 'Check the status of any website in real-time with Network Sentinel. Free online tool to monitor if a site is online, offline, or has errors.',
+    name: t.appName,
+    description: t.meta.description,
     url: siteUrl,
     applicationCategory: 'Utilities',
     operatingSystem: 'All',
@@ -100,7 +112,6 @@ export default function RootLayout({
     "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE", "fr-FR", "de-DE", "nl-NL", "hi-IN", "bn-BD", "ur-PK", "id-ID", "ja-JP", "tr-TR", "te-IN", "vi-VN"]
   };
 
-  const lang = params.lang || 'en';
   const dir = ['ar', 'ur'].includes(lang) ? 'rtl' : 'ltr';
   
   return (
@@ -113,8 +124,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link rel="alternate" hrefLang="pt-BR" href={`${siteUrl}/pt`} />
         <link rel="alternate" hrefLang="en-US" href={`${siteUrl}/en`} />
+        <link rel="alternate" hrefLang="pt-BR" href={`${siteUrl}/pt`} />
         <link rel="alternate" hrefLang="es-ES" href={`${siteUrl}/es`} />
         <link rel="alternate" hrefLang="zh-CN" href={`${siteUrl}/zh`} />
         <link rel="alternate" hrefLang="ru-RU" href={`${siteUrl}/ru`} />
