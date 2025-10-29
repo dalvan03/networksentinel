@@ -13,12 +13,12 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
   const languages: { [key: string]: string } = {
     'en-US': '/en', 'en-GB': '/en', 'en-CA': '/en', 'en-AU': '/en',
-    'pt-BR': '/pt', 'pt-PT': '/pt',
-    'es-ES': '/es', 'es-MX': '/es', 'es-AR': '/es',
+    'pt-BR': '/pt', 'pt-PT': '/pt', 'pt-AO': '/pt', 'pt-MZ': '/pt',
+    'es-ES': '/es', 'es-MX': '/es', 'es-AR': '/es', 'es-CO': '/es', 'es-CL': '/es',
     'zh-CN': '/zh', 'zh-TW': '/zh', 'zh-HK': '/zh',
-    'ru-RU': '/ru',
+    'ru-RU': '/ru', 'ru-UA': '/ru',
     'ar-SA': '/ar', 'ar-EG': '/ar', 'ar-AE': '/ar',
-    'fr-FR': '/fr', 'fr-CA': '/fr',
+    'fr-FR': '/fr', 'fr-CA': '/fr', 'fr-BE': '/fr', 'fr-CH': '/fr',
     'de-DE': '/de', 'de-AT': '/de', 'de-CH': '/de',
     'nl-NL': '/nl', 'nl-BE': '/nl',
     'hi-IN': '/hi',
