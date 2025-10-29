@@ -19,6 +19,7 @@ export const metadata: Metadata = {
       'pt-BR': '/pt',
       'es-ES': '/es',
       'zh-CN': '/zh',
+      'ru-RU': '/ru',
     },
   },
   openGraph: {
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'en_US',
-    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN'],
+    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU'],
     type: 'website',
   },
   twitter: {
@@ -80,7 +81,7 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN"]
+    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU"]
   };
   
   return (
@@ -97,6 +98,7 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="en-US" href={`${siteUrl}/en`} />
         <link rel="alternate" hrefLang="es-ES" href={`${siteUrl}/es`} />
         <link rel="alternate" hrefLang="zh-CN" href={`${siteUrl}/zh`} />
+        <link rel="alternate" hrefLang="ru-RU" href={`${siteUrl}/ru`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen">
