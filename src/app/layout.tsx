@@ -21,6 +21,9 @@ export const metadata: Metadata = {
       'zh-CN': '/zh',
       'ru-RU': '/ru',
       'ar-AE': '/ar',
+      'fr-FR': '/fr',
+      'de-DE': '/de',
+      'nl-NL': '/nl',
     },
   },
   openGraph: {
@@ -37,7 +40,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'en_US',
-    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE'],
+    alternateLocale: ['pt_BR', 'es_ES', 'zh_CN', 'ru_RU', 'ar_AE', 'fr_FR', 'de_DE', 'nl_NL'],
     type: 'website',
   },
   twitter: {
@@ -84,7 +87,7 @@ export default function RootLayout({
       price: '0',
       priceCurrency: 'USD',
     },
-    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE"]
+    "inLanguage": ["en-US", "pt-BR", "es-ES", "zh-CN", "ru-RU", "ar-AE", "fr-FR", "de-DE", "nl-NL"]
   };
 
   const lang = params.lang || 'en';
@@ -106,6 +109,9 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="zh-CN" href={`${siteUrl}/zh`} />
         <link rel="alternate" hrefLang="ru-RU" href={`${siteUrl}/ru`} />
         <link rel="alternate" hrefLang="ar-AE" href={`${siteUrl}/ar`} />
+        <link rel="alternate" hrefLang="fr-FR" href={`${siteUrl}/fr`} />
+        <link rel="alternate" hrefLang="de-DE" href={`${siteUrl}/de`} />
+        <link rel="alternate" hrefLang="nl-NL" href={`${siteUrl}/nl`} />
         <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen">
