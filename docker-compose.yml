@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  networksentinel-web:
+    build: .
+    container_name: networksentinel
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_SITE_URL=https://networksentinel.anyco.com.br
+    networks:
+      - nginx-proxy-network
+    # Não exponha portas publicamente; Nginx Proxy Manager fará o encaminhamento
+    # Caso precise testar localmente com compose, descomente:
+    # ports:
+    #   - "3000:3000"
+
+networks:
+  nginx-proxy-network:
+    external: true
+    name: nginx-proxy

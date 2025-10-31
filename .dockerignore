@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.git
+.gitignore
+.vercel
+.genkit
+.idx
+.pnpm-store
+coverage
+*.log
+.env*
+firebase-debug.log
+firestore-debug.log
