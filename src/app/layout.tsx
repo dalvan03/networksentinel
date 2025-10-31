@@ -153,8 +153,8 @@ export default function RootLayout({
           <div className="container mx-auto flex items-center justify-between">
             <LanguageSwitcher />
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>Built with Firebase Studio</span>
-              <a href="https://github.com/firebase/studio" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+              <span>Built by AnyCo Brazil</span>
+              <a href="https://anyco.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
                 <Github className="h-4 w-4" />
                 <span className="sr-only">GitHub</span>
               </a>
