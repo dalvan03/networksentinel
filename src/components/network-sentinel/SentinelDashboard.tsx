@@ -2,22 +2,36 @@
 
 import { useState } from 'react';
 import type { UrlStatus } from '@/lib/types';
-import { checkUrlStatuses } from '@/app/actions';
+import { checkUrlStatus } from '@/app/actions';
 import { UrlInputForm } from './UrlInputForm';
 import { StatusDisplay } from './StatusDisplay';
 
 export default function SentinelDashboard() {
-  const [results, setResults] = useState<UrlStatus[]>([]);
+  const [results, setResults] = useState([] as UrlStatus[]);
   const [isChecking, setIsChecking] = useState(false);
 
   const handleCheckUrls = async (urls: string[]) => {
     setIsChecking(true);
+    // Initialize with checking entries
     setResults(urls.map(url => ({ url, status: 'checking' })));
 
-    const statuses = await checkUrlStatuses(urls);
+    // Progressive updates: resolve each URL individually
+    const updates = await Promise.all(
+      urls.map(async (url, index) => {
+        const res = await checkUrlStatus(url);
+        // Update the specific index in place
+        setResults((prev: UrlStatus[]) => {
+          const next = [...prev];
+          next[index] = res;
+          return next;
+        });
+        return res;
+      })
+    );
 
-    setResults(statuses);
     setIsChecking(false);
+    // Ensure final state is consistent (optional)
+    setResults(updates);
   };
 
   return (

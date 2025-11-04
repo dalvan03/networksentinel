@@ -60,8 +60,31 @@ export function UrlInputForm({ onCheck, isChecking }: UrlInputFormProps) {
     reader.readAsText(file);
   };
 
+  function parseInput(raw: string): string[] {
+    const text = raw.trim();
+    if (!text) return [];
+    // Try JSON array first
+    try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed) && parsed.every((u) => typeof u === 'string')) {
+        return parsed;
+      }
+    } catch (_) {
+      // not JSON, fall through
+    }
+    // Fallback: split by newlines or commas
+    return text
+      .split(/[\n,]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  }
+
   function onSubmit(data: z.infer<typeof formSchema>) {
-    const urls = data.urls.split('\n').filter((url) => url.trim() !== '');
+    const urls = parseInput(data.urls);
+    if (urls.length === 0) {
+      toast({ title: 'No URLs detected', description: 'Please paste URLs separated by newline or commas, or a JSON array.', variant: 'destructive' });
+      return;
+    }
     onCheck(urls);
   }
 
@@ -80,7 +103,7 @@ export function UrlInputForm({ onCheck, isChecking }: UrlInputFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea placeholder={"https://google.com\nhttps://github.com\nexample.com"} {...field} rows={8} className="font-code text-sm" />
+                    <Textarea placeholder={"https://google.com\nhttps://github.com\nexample.com\n[\"https://a.com\", \"https://b.com\"]\nhttps://a.com, https://b.com"} {...field} rows={8} className="font-code text-sm" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

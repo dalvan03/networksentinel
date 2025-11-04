@@ -63,17 +63,35 @@ export function StatusDisplay({ results, isChecking }: StatusDisplayProps) {
                       </TableCell>
                     </TableRow>
                   ))
-                : results.map((result, index) => (
-                    <TableRow key={`${result.url}-${index}`} className="transition-opacity animate-in fade-in-25">
-                      <TableCell>
-                        <StatusIcon status={result.status} />
-                      </TableCell>
-                      <TableCell className="font-code text-sm truncate max-w-xs">{result.url}</TableCell>
-                      <TableCell className="text-right font-code text-sm">{result.statusCode ?? '-'}</TableCell>
-                      <TableCell className="text-right font-code text-sm">{result.responseTime ?? '-'}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground truncate max-w-sm">{result.error || (result.status === 'online' ? 'OK' : '-')}</TableCell>
-                    </TableRow>
-                  ))}
+                : results.map((result, index) => {
+                    const href = result.url?.startsWith('http://') || result.url?.startsWith('https://')
+                      ? result.url
+                      : `https://${result.url}`;
+                    return (
+                      <TableRow key={`${result.url}-${index}`} className="transition-opacity animate-in fade-in-25">
+                        <TableCell>
+                          <StatusIcon status={result.status} />
+                        </TableCell>
+                        <TableCell className="font-code text-sm truncate max-w-xs">
+                          {result.url ? (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline"
+                            >
+                              {result.url}
+                            </a>
+                          ) : (
+                            '-'
+                          )}
+                        </TableCell>
+                        <TableCell className="text-right font-code text-sm">{result.statusCode ?? '-'}</TableCell>
+                        <TableCell className="text-right font-code text-sm">{result.responseTime ?? '-'}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground truncate max-w-sm">{result.error || (result.status === 'online' ? 'OK' : '-')}</TableCell>
+                      </TableRow>
+                    );
+                  })}
             </TableBody>
           </Table>
         )}

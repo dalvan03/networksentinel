@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const locales = ['en', 'es', 'pt', 'zh', 'ru', 'ar', 'fr', 'de', 'nl', 'hi', 'bn', 'ur', 'id', 'ja', 'tr', 'te', 'vi'];
+const locales: readonly string[] = ['en', 'es', 'pt', 'zh', 'ru', 'ar', 'fr', 'de', 'nl', 'hi', 'bn', 'ur', 'id', 'ja', 'tr', 'te', 'vi'];
 const defaultLocale = 'en';
 
 function getLocale(request: NextRequest): string {
   const acceptLanguage = request.headers.get('accept-language');
   if (acceptLanguage) {
-    const languages = acceptLanguage.split(',').map(lang => lang.split(';')[0].trim());
+    const languages: string[] = acceptLanguage
+      .split(',')
+      .map((lang: string) => lang.split(';')[0].trim());
     for (const lang of languages) {
       const locale = lang.split('-')[0];
       if (locales.includes(locale)) {
@@ -37,14 +39,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect to the detected locale
-  const locale = getLocale(request);
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-  
-  // For the root path, just redirect to the locale
+  // For the root path, always redirect to the default locale to avoid
+  // blank pages when a detected locale has no corresponding route.
   if (pathname === '/') {
+    request.nextUrl.pathname = `/${defaultLocale}`;
     return NextResponse.redirect(request.nextUrl);
   }
+
+  // For non-root paths, redirect/rewrite to the detected locale
+  const locale = getLocale(request);
+  request.nextUrl.pathname = `/${locale}${pathname}`;
 
   return NextResponse.rewrite(request.nextUrl);
 }

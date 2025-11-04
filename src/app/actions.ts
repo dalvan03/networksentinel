@@ -11,11 +11,23 @@ function isValidUrl(string: string) {
   }
 }
 
-export async function checkUrlStatuses(urls: string[]): Promise<UrlStatus[]> {
-  const promises = urls.map(async (url): Promise<UrlStatus> => {
+function sanitizeUrlInput(input: string): string | null {
+  let s = input.trim();
+  if (!s) return null;
+  // strip trailing commas
+  if (s.endsWith(',')) s = s.slice(0, -1).trim();
+  // strip surrounding quotes
+  if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+    s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+export async function checkUrlStatus(url: string): Promise<UrlStatus> {
     const startTime = Date.now();
     
-    if (!url.trim()) {
+    const cleaned = sanitizeUrlInput(url);
+    if (!cleaned) {
       return {
         url: 'empty line',
         status: 'error',
@@ -23,14 +35,14 @@ export async function checkUrlStatuses(urls: string[]): Promise<UrlStatus[]> {
       };
     }
 
-    let fullUrl = url.trim();
+    let fullUrl = cleaned;
     if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
       fullUrl = `https://${fullUrl}`;
     }
 
     if (!isValidUrl(fullUrl)) {
       return {
-        url,
+        url: cleaned,
         status: 'error',
         error: 'Invalid URL format',
       };
@@ -50,14 +62,14 @@ export async function checkUrlStatuses(urls: string[]): Promise<UrlStatus[]> {
 
       if (response.ok) {
         return {
-          url,
+          url: cleaned,
           status: 'online',
           statusCode: response.status,
           responseTime,
         };
       } else {
         return {
-          url,
+          url: cleaned,
           status: 'offline',
           statusCode: response.status,
           responseTime,
@@ -68,20 +80,21 @@ export async function checkUrlStatuses(urls: string[]): Promise<UrlStatus[]> {
       const responseTime = Date.now() - startTime;
       if (error.name === 'AbortError') {
         return {
-          url,
+          url: cleaned,
           status: 'error',
           responseTime,
           error: 'Request timed out (10s)',
         };
       }
       return {
-        url,
+        url: cleaned,
         status: 'error',
         responseTime,
         error: error.cause?.message || error.message || 'Unknown fetch error',
       };
     }
-  });
+}
 
-  return Promise.all(promises);
+export async function checkUrlStatuses(urls: string[]): Promise<UrlStatus[]> {
+  return Promise.all(urls.map((u) => checkUrlStatus(u)));
 }
